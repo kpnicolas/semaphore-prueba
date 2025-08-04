@@ -3,18 +3,6 @@
   gather_facts: false  # Opcional pero recomendado para tareas simples
   tasks:
     - name: Enviar correo con imagen incrustada en el cuerpo
-      community.general.mail:
-        host: smtp.office365.com
-        port: 587
-        username: no-reply.backdata@redsis.com
-        password: "R3ds1sv33am!!"
-        from: no-reply-notificaciones@redsis.com
-        to: ndortiz@redsis.com
-          #- connectcacn1@redsis.com  # Puedes descomentar esto si quieres enviar a más de uno
-        subject: "Alerta de disco en máquina IBM i"
-        subtype: html
-        body: |
-          <p>prueba</p>
-        secure: starttls  # Esto es NECESARIO para Office365
-      delegate_to: localhost
+      debug:  
+        msg: "hola"
 
