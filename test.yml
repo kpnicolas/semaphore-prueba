@@ -2,7 +2,7 @@
 - hosts: localhost
   gather_facts: false  # Opcional pero recomendado para tareas simples
   tasks:
-    - name: Enviar correo con imagen incrustada en el cuerpo
+    - name: Imprimir mensaje
       debug:  
         msg: "hola"
 
