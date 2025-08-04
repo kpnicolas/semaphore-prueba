@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Enviar correo con imagen incrustada en el cuerpo
+      community.general.mail:
+        host: smtp.office365.com
+        port: 587
+        username: no-reply.backdata@redsis.com
+        password: "R3ds1sv33am!!"
+        from: no-reply-notificaciones@redsis.com
+        to: ndortiz@redsis.com
+        #connectcacn1@redsis.com
+        subject: "Alerta de disco en maquina IBM i"
+        subtype: html
+        body: |
+          <p>Se presentó una alerta critica de disco, adjuntamos grafica de el estado del disco y un PRTDSKINF a nivel de librerias</p>
+          <img src="data:image/png;base64,{{ zabbix_image.content }}" alt="Zabbix Graph" style="max-width:100%; height:auto;">
+        attach: /tmp/PRTDSKINF.txt
+      delegate_to: localhost   
