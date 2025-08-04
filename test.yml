@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
+  gather_facts: false  # Opcional pero recomendado para tareas simples
   tasks:
     - name: Enviar correo con imagen incrustada en el cuerpo
       community.general.mail:
@@ -9,9 +10,11 @@
         password: "R3ds1sv33am!!"
         from: no-reply-notificaciones@redsis.com
         to: ndortiz@redsis.com
-        #connectcacn1@redsis.com
-        subject: "Alerta de disco en maquina IBM i"
+          #- connectcacn1@redsis.com  # Puedes descomentar esto si quieres enviar a más de uno
+        subject: "Alerta de disco en máquina IBM i"
         subtype: html
         body: |
           <p>prueba</p>
-      delegate_to: localhost   
+        secure: starttls  # Esto es NECESARIO para Office365
+      delegate_to: localhost
+
