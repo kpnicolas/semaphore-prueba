@@ -13,7 +13,5 @@
         subject: "Alerta de disco en maquina IBM i"
         subtype: html
         body: |
-          <p>Se presentó una alerta critica de disco, adjuntamos grafica de el estado del disco y un PRTDSKINF a nivel de librerias</p>
-          <img src="data:image/png;base64,{{ zabbix_image.content }}" alt="Zabbix Graph" style="max-width:100%; height:auto;">
-        attach: /tmp/PRTDSKINF.txt
+          <p>prueba</p>
       delegate_to: localhost   
