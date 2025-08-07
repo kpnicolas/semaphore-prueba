@@ -34,8 +34,8 @@
         timeout: 60
         secure: starttls
         subject: "CASOS ACTIVOS - {{ item.key }} - {{ ansible_date_time.date }} - {{ ansible_date_time.time }}"
-        #to: ndortiz@redsis.com
-        to: "{{ item.key }}"
+        #to: ndortiz@redsis.com"{{ item.key }}"
+        to: ndortiz@redsis.com
         cc:
           - segcac@redsis.com
         from: no-reply-notificaciones@redsis.com
