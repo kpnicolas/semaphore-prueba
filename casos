@@ -1,0 +1,86 @@
+---
+- name: Consulta base de datos GLPI
+  community.mysql.mysql_query:
+    login_db: glpi
+    login_user: CAC_Vista
+    login_password: Aa227115212!!
+    #query: select * from glpi_tickets order by id desc limit 10;
+    query: Select glpi_tickets.id, glpi_tickets.status, glpi_entities.name, /*glpi_itilcategories.completename As categoria*/COALESCE(glpi_itilcategories.completename, 'N/A') AS categoria, glpi_tickets.name,
+            CONCAT(glpi_users.firstname, ' ', glpi_users.realname) AS creado_por,  glpi_useremails.email AS correo_tecnico,
+            glpi_tickets.date_mod AS ultima_modificación, glpi_groups.name
+            From glpi_tickets
+            left join glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
+            left join glpi_itilcategories ON glpi_tickets.itilcategories_id = glpi_itilcategories.id
+            left join glpi_users ON glpi_tickets.users_id_recipient = glpi_users.id
+            left join glpi_tickets_users ON glpi_tickets.id = glpi_tickets_users.tickets_id and glpi_tickets_users.type = 2
+            left join glpi_useremails ON glpi_tickets_users.users_id = glpi_useremails.users_id
+            left join glpi_groups_tickets ON glpi_tickets.id = glpi_groups_tickets.tickets_id
+            left join glpi_groups ON glpi_groups_tickets.groups_id = glpi_groups.id
+            Where glpi_groups.name = "Centro de Gestión"
+            and glpi_tickets.status not in (5, 6);
+- name: Organizar casos por correo del ingeniero
+  set_fact:
+    casos_por_correo: "{{ casos_por_correo | default({}) | combine({item.correo_tecnico: (casos_por_correo[item.correo_tecnico] | default([])) + [item]}) }}"
+  loop: "{{ prueba.query_result[0] }}"
+- name: Enviar correos con casos asignados
+  community.general.mail:
+    host: smtp.office365.com
+    port: 587
+    username: no-reply.backdata@redsis.com
+    password: R3ds1sv33am!!
+    timeout: 60
+    secure: starttls
+    subject: "CASOS ACTIVOS - {{ item.key }} - {{ ansible_date_time.date }} - {{ ansible_date_time.time }}"
+    #to: ndortiz@redsis.com
+    to: "{{ item.key }}"
+    cc:
+      - segcac@redsis.com
+    from: no-reply-notificaciones@redsis.com
+    subtype: "html"
+    body: |
+      <html>
+          <head>
+            <style>
+              table { border-collapse: collapse; width: 100%; }
+              th { background-color: yellow; padding: 8px; border: 1px solid black; }
+              td { padding: 8px; border: 1px solid black; }
+            </style>
+          </head>
+          <body>
+            <h2>Casos activos para: {{ item.key }}</h2>
+            <p>Cordial saludo estimado, el presente correo tiene como finalidad informarle los casos abiertos a su nombre.
+            Los casos tienen diferentes estados, por favor revisar cada uno y dar su retroalimentación lo más pronto posible para poder cumplirlos satisfactoriamente.
+            En caso de que necesiten apoyo sobre uno de los casos, ya sea hacia los clientes o proveedores, indicarnos para poder colaborarles con la gestión.</p>
+            <table>
+              <tr>
+                <th>ID</th>
+                <th>ESTADO</th>
+                <th>ENTIDAD</th>
+                <th>CATEGORÍA</th>
+                <th>TÍTULO</th>
+                <th>CREADO POR</th>
+                <th>CORREO</th>
+                <th>ÚLTIMA MODIFICACIÓN</th>
+              </tr>
+              {% for caso in item.value %}
+              <tr>
+                <td><strong>{{ caso.id }}</strong></td>
+                <td>
+                  {% if caso.status == 1 %}Nuevo{% elif caso.status == 2 %}En curso (Asignado)
+                  {% elif caso.status == 3 %}En curso (Planificado){% elif caso.status == 4 %}En Espera{% else %}Desconocido{% endif %}
+                </td>
+                <td>{{ caso.name }}</td>
+                <td>{{ caso.categoria }}</td>
+                <td>{{ caso["glpi_tickets.name"] }}</td>
+                <td>{{ caso.creado_por }}</td>
+                <td>{{ caso.correo_tecnico }}</td>
+                <td>{{ caso.ultima_modificación }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+            <br>
+            <p>Este correo es enviado automáticamente, si ya brindó el respectivo seguimiento por favor hacer caso omiso.</p>
+          </body>
+          </html>
+  loop: "{{ casos_por_correo | dict2items }}"
+  delegate_to: localhost
