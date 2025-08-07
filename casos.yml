@@ -21,10 +21,11 @@
                 left join glpi_groups ON glpi_groups_tickets.groups_id = glpi_groups.id
                 Where glpi_groups.name = "Centro de Gestión"
                 and glpi_tickets.status not in (5, 6);
+      register: result    
     - name: Organizar casos por correo del ingeniero
       set_fact:
         casos_por_correo: "{{ casos_por_correo | default({}) | combine({item.correo_tecnico: (casos_por_correo[item.correo_tecnico] | default([])) + [item]}) }}"
-      loop: "{{ prueba.query_result[0] }}"
+      loop: "{{ result.query_result[0] }}"
     - name: Enviar correos con casos asignados
       community.general.mail:
         host: smtp.office365.com
