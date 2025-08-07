@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: glpi
   gather_facts: false  # Opcional pero recomendado para tareas simples
   tasks:
     - name: Consulta base de datos GLPI
