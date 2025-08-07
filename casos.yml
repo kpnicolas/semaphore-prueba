@@ -1,6 +1,6 @@
 ---
 - hosts: glpi
-  gather_facts: false  # Opcional pero recomendado para tareas simples
+  gather_facts: yes  # Opcional pero recomendado para tareas simples
   tasks:
     - name: Consulta base de datos GLPI
       community.mysql.mysql_query:
