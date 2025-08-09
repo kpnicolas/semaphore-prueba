@@ -62,9 +62,9 @@
         login_db: "{{ login_db }}"
         login_user: "{{ login_user }}"
         login_password: "{{ login_password }}"
-        query:
+        query: "{{ consulta_sql }}"
       register: result
 
-    #- name: Mostrar resultados
-     # debug:
-      #  var: "{{ result.query_result[0] }}"
+    - name: Mostrar resultados
+      debug:
+        var: "{{ result.query_result[0] }}"
