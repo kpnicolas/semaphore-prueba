@@ -61,10 +61,6 @@
         query: "{{ consulta_sql }}"
       register: result
 
-    - name: Mostrar resultados
-      debug:
-        msg: "{{ result.query_result[0] }}"
-        
     - name: Crear CSV con resultados con BOM, comillas y saltos reales
       copy:
         dest: "/tmp/casos.csv"
@@ -82,15 +78,7 @@
           {% endfor %}
       when: excel | lower == "si"
       delegate_to: localhost
-
-
-
-
-
-
-
-
-
+      
     - name: Enviar correo con casos del ingeniero
       community.general.mail:
         host: "{{ email_host }}"
