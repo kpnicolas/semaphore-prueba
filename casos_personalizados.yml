@@ -3,51 +3,50 @@
   hosts: glpi
   gather_facts: no
   vars: 
-    vars: 
-      consulta_todos: |
-        SELECT glpi_tickets.id,
-               glpi_tickets.status,
-               glpi_entities.name,
-               COALESCE(glpi_itilcategories.completename, 'N/A') AS Categoria,
-               glpi_tickets.name,
-               CONCAT(glpi_users.firstname, ' ', glpi_users.realname) AS Creado_Por,
-               glpi_useremails.email AS Correo_Tecnico,
-               glpi_tickets.date_mod AS Ultima_Modificación,
-               glpi_groups.name
-        FROM glpi_tickets
-        LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
-        LEFT JOIN glpi_itilcategories ON glpi_tickets.itilcategories_id = glpi_itilcategories.id
-        LEFT JOIN glpi_users ON glpi_tickets.users_id_recipient = glpi_users.id
-        LEFT JOIN glpi_tickets_users ON glpi_tickets.id = glpi_tickets_users.tickets_id AND glpi_tickets_users.type = 2
-        LEFT JOIN glpi_useremails ON glpi_tickets_users.users_id = glpi_useremails.users_id
-        LEFT JOIN glpi_groups_tickets ON glpi_tickets.id = glpi_groups_tickets.tickets_id
-        LEFT JOIN glpi_groups ON glpi_groups_tickets.groups_id = glpi_groups.id
-        WHERE glpi_groups.name COLLATE utf8mb4_unicode_ci = "Centro de Gestión" COLLATE utf8mb4_unicode_ci
-          AND glpi_useremails.email COLLATE utf8mb4_unicode_ci = '{{ email_tecnico }}' COLLATE utf8mb4_unicode_ci
-          AND glpi_tickets.status NOT IN (5, 6);
-  
-      consulta_cliente: |
-        SELECT glpi_tickets.id,
-               glpi_tickets.status,
-               glpi_entities.name,
-               COALESCE(glpi_itilcategories.completename, 'N/A') AS Categoria,
-               glpi_tickets.name,
-               CONCAT(glpi_users.firstname, ' ', glpi_users.realname) AS Creado_Por,
-               glpi_useremails.email AS Correo_Tecnico,
-               glpi_tickets.date_mod AS Ultima_Modificación,
-               glpi_groups.name
-        FROM glpi_tickets
-        LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
-        LEFT JOIN glpi_itilcategories ON glpi_tickets.itilcategories_id = glpi_itilcategories.id
-        LEFT JOIN glpi_users ON glpi_tickets.users_id_recipient = glpi_users.id
-        LEFT JOIN glpi_tickets_users ON glpi_tickets.id = glpi_tickets_users.tickets_id AND glpi_tickets_users.type = 2
-        LEFT JOIN glpi_useremails ON glpi_tickets_users.users_id = glpi_useremails.users_id
-        LEFT JOIN glpi_groups_tickets ON glpi_tickets.id = glpi_groups_tickets.tickets_id
-        LEFT JOIN glpi_groups ON glpi_groups_tickets.groups_id = glpi_groups.id
-        WHERE glpi_groups.name COLLATE utf8mb4_unicode_ci = "Centro de Gestión" COLLATE utf8mb4_unicode_ci
-          AND glpi_useremails.email COLLATE utf8mb4_unicode_ci = '{{ email_tecnico }}' COLLATE utf8mb4_unicode_ci
-          AND glpi_entities.name COLLATE utf8mb4_unicode_ci = '{{ cliente }}' COLLATE utf8mb4_unicode_ci
-          AND glpi_tickets.status NOT IN (5, 6);
+    consulta_todos: |
+      SELECT glpi_tickets.id,
+             glpi_tickets.status,
+             glpi_entities.name,
+             COALESCE(glpi_itilcategories.completename, 'N/A') AS Categoria,
+             glpi_tickets.name,
+             CONCAT(glpi_users.firstname, ' ', glpi_users.realname) AS Creado_Por,
+             glpi_useremails.email AS Correo_Tecnico,
+             glpi_tickets.date_mod AS Ultima_Modificación,
+             glpi_groups.name
+      FROM glpi_tickets
+      LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
+      LEFT JOIN glpi_itilcategories ON glpi_tickets.itilcategories_id = glpi_itilcategories.id
+      LEFT JOIN glpi_users ON glpi_tickets.users_id_recipient = glpi_users.id
+      LEFT JOIN glpi_tickets_users ON glpi_tickets.id = glpi_tickets_users.tickets_id AND glpi_tickets_users.type = 2
+      LEFT JOIN glpi_useremails ON glpi_tickets_users.users_id = glpi_useremails.users_id
+      LEFT JOIN glpi_groups_tickets ON glpi_tickets.id = glpi_groups_tickets.tickets_id
+      LEFT JOIN glpi_groups ON glpi_groups_tickets.groups_id = glpi_groups.id
+      WHERE glpi_groups.name COLLATE utf8mb4_unicode_ci = "Centro de Gestión" COLLATE utf8mb4_unicode_ci
+        AND glpi_useremails.email COLLATE utf8mb4_unicode_ci = '{{ email_tecnico }}' COLLATE utf8mb4_unicode_ci
+        AND glpi_tickets.status NOT IN (5, 6);
+
+    consulta_cliente: |
+      SELECT glpi_tickets.id,
+             glpi_tickets.status,
+             glpi_entities.name,
+             COALESCE(glpi_itilcategories.completename, 'N/A') AS Categoria,
+             glpi_tickets.name,
+             CONCAT(glpi_users.firstname, ' ', glpi_users.realname) AS Creado_Por,
+             glpi_useremails.email AS Correo_Tecnico,
+             glpi_tickets.date_mod AS Ultima_Modificación,
+             glpi_groups.name
+      FROM glpi_tickets
+      LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
+      LEFT JOIN glpi_itilcategories ON glpi_tickets.itilcategories_id = glpi_itilcategories.id
+      LEFT JOIN glpi_users ON glpi_tickets.users_id_recipient = glpi_users.id
+      LEFT JOIN glpi_tickets_users ON glpi_tickets.id = glpi_tickets_users.tickets_id AND glpi_tickets_users.type = 2
+      LEFT JOIN glpi_useremails ON glpi_tickets_users.users_id = glpi_useremails.users_id
+      LEFT JOIN glpi_groups_tickets ON glpi_tickets.id = glpi_groups_tickets.tickets_id
+      LEFT JOIN glpi_groups ON glpi_groups_tickets.groups_id = glpi_groups.id
+      WHERE glpi_groups.name COLLATE utf8mb4_unicode_ci = "Centro de Gestión" COLLATE utf8mb4_unicode_ci
+        AND glpi_useremails.email COLLATE utf8mb4_unicode_ci = '{{ email_tecnico }}' COLLATE utf8mb4_unicode_ci
+        AND glpi_entities.name COLLATE utf8mb4_unicode_ci = '{{ cliente }}' COLLATE utf8mb4_unicode_ci
+        AND glpi_tickets.status NOT IN (5, 6);
 
   tasks:
     - name: Seleccionar consulta según cliente
