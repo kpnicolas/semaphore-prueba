@@ -65,21 +65,23 @@
       debug:
         msg: "{{ result.query_result[0] }}"
         
-    - name: Crear CSV con resultados
+    - name: Crear CSV con resultados con BOM y comillas
       copy:
         dest: "/tmp/casos.csv"
         content: |
+          {{ '\ufeff' }}{# BOM UTF-8 #}
           {# Encabezados #}
           {% for key in result.query_result[0][0].keys() -%}
-          {{ key }}{% if not loop.last %},{% endif %}
+          "{{ key }}"{% if not loop.last %},{% endif %}
           {%- endfor %}
           {% for fila in result.query_result[0] -%}
           {% for valor in fila.values() -%}
-          {{ valor }}{% if not loop.last %},{% endif %}
+          "{{ valor | replace('"', '""') }}"{% if not loop.last %},{% endif %}
           {%- endfor %}
           {%- endfor %}
       when: excel | lower == "si"
       delegate_to: localhost
+
 
 
 
