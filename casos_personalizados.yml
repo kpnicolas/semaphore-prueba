@@ -65,9 +65,9 @@
       debug:
         msg: "{{ result.query_result[0] }}"
         
-    - name: Crear CSV con resultados con BOM y comillas
+    - name: Crear XLSX con resultados con BOM y comillas
       copy:
-        dest: "/tmp/casos.csv"
+        dest: "/tmp/casos.xlsx"
         content: |
           ﻿{% for key in result.query_result[0][0].keys() -%}
           "{{ key }}"{% if not loop.last %},{% endif %}
