@@ -64,8 +64,13 @@
     - name: Mostrar resultados
       debug:
         msg: "{{ result.query_result[0] }}"
-
-
+        
+    - name: Crear Excel con resultados
+      community.general.xlsx_write:
+        path: "/tmp/casos_glpi.xlsx"
+        data: "{{ result.query_result[0] }}"
+      when: excel | lower == "si"
+      delegate_to: localhost
 
 
     - name: Enviar correo con casos del ingeniero
@@ -81,6 +86,7 @@
         cc: "{{ email_cc }}"
         from: "{{ email_from }}"
         subtype: "html"
+        attach: "{{ ['/tmp/casos_glpi.xlsx'] if excel | lower == 'si' else omit }}"
         body: |
           <html>
               <head>
