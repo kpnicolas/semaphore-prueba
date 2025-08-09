@@ -69,9 +69,7 @@
       copy:
         dest: "/tmp/casos.csv"
         content: |
-          {{ '\ufeff' }}{# BOM UTF-8 #}
-          {# Encabezados #}
-          {% for key in result.query_result[0][0].keys() -%}
+          ﻿{% for key in result.query_result[0][0].keys() -%}
           "{{ key }}"{% if not loop.last %},{% endif %}
           {%- endfor %}
           {% for fila in result.query_result[0] -%}
@@ -81,6 +79,7 @@
           {%- endfor %}
       when: excel | lower == "si"
       delegate_to: localhost
+
 
 
 
