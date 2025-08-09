@@ -63,4 +63,4 @@
 
     - name: Mostrar resultados
       debug:
-        msg: "{{ result.query_result }}"
+        msg: "{{ result }}"
