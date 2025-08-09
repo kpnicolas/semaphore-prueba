@@ -77,8 +77,8 @@
           {{ valor }}{% if not loop.last %},{% endif %}
           {% endfor %}
           {% endfor %}
-        when: excel | lower == "si"
-        delegate_to: localhost
+      when: excel | lower == "si"
+      delegate_to: localhost
 
 
     - name: Enviar correo con casos del ingeniero
