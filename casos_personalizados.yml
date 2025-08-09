@@ -65,6 +65,6 @@
         query:
       register: result
 
-    - name: Mostrar resultados
-      debug:
-        var: "{{ result.query_result[0] }}"
+    #- name: Mostrar resultados
+     # debug:
+      #  var: "{{ result.query_result[0] }}"
