@@ -65,7 +65,4 @@
         query: "{{ consulta_sql }}"
       register: result
 
-    - name: Mostrar resultados
-      debug:
-        msg: "{{ result.query_result }}"
 
