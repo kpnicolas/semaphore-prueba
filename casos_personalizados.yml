@@ -91,9 +91,7 @@
                 </style>
               </head>
               <body>
-                <h2>Casos activos para: {{ email_tecnico }}</h2>
-                <p>Cordial saludo estimado, el presente correo tiene como finalidad informarle los casos abiertos a su nombre.
-                Por favor revisar cada uno y dar su retroalimentación lo más pronto posible.</p>
+                <h2>Casos para: {{ email_tecnico }}</h2>
                 <table>
                   <tr>
                     {% for key in result.query_result[0][0].keys() %}
@@ -109,7 +107,6 @@
                   {% endfor %}
                 </table>
                 <br>
-                <p>Este correo es enviado automáticamente, si ya brindó seguimiento, por favor hacer caso omiso.</p>
               </body>
           </html>
       delegate_to: localhost
