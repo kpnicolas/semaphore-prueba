@@ -72,6 +72,7 @@
           ﻿{% for key in result.query_result[0][0].keys() -%}
           "{{ key }}"{% if not loop.last %},{% endif %}
           {%- endfor %}
+          
           {% for fila in result.query_result[0] -%}
           {% set row = [] %}
           {% for valor in fila.values() -%}
@@ -81,6 +82,7 @@
           {% endfor %}
       when: excel | lower == "si"
       delegate_to: localhost
+
 
 
 
