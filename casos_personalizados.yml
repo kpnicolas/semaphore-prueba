@@ -65,7 +65,7 @@
       debug:
         msg: "{{ result.query_result[0] }}"
         
-    - name: Crear CSV con resultados con BOM y comillas y saltos de línea
+    - name: Crear CSV con resultados con BOM, comillas y saltos reales
       copy:
         dest: "/tmp/casos.csv"
         content: |
@@ -73,13 +73,15 @@
           "{{ key }}"{% if not loop.last %},{% endif %}
           {%- endfor %}
           {% for fila in result.query_result[0] -%}
+          {% set row = [] %}
           {% for valor in fila.values() -%}
-          "{{ valor | replace('"', '""') }}"{% if not loop.last %},{% endif %}
+          {% set _ = row.append('"' ~ valor | replace('"', '""') ~ '"') %}
           {%- endfor %}
-          {% if not loop.last %}{{ '\n' }}{% endif %}
-          {%- endfor %}
+          {{ row | join(',') }}
+          {% endfor %}
       when: excel | lower == "si"
       delegate_to: localhost
+
 
 
 
