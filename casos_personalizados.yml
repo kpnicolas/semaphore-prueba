@@ -63,8 +63,8 @@
         login_user: "{{ login_user }}"
         login_password: "{{ login_password }}"
         query:
-      register_ result
+      register: result
 
     - name: Mostrar resultados
       debug:
-        var: resultado.query_result
+        var: result.query_result[0]
