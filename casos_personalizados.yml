@@ -52,7 +52,7 @@
         AND glpi_entities.name COLLATE utf8mb4_unicode_ci = @var_cliente COLLATE utf8mb4_unicode_ci
         AND glpi_tickets.status NOT IN (5, 6);
 
-    tasks:
+  tasks:
     - name: Seleccionar consulta según cliente
       set_fact:
         consulta_sql: "{{ consulta_todos if cliente == 'ALL' else consulta_cliente }}"
