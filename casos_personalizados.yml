@@ -1,6 +1,6 @@
 ---
 - name: Consultar tickets GLPI
-  hosts: localhost
+  hosts: glpi
   gather_facts: no
   vars: 
     consulta_todos: |
