@@ -64,3 +64,52 @@
     - name: Mostrar resultados
       debug:
         msg: "{{ result.query_result[0] }}"
+
+
+
+
+    - name: Enviar correo con casos del ingeniero
+      community.general.mail:
+        host: "{{ email_host }}"
+        port: "{{ email_port }}"
+        username: "{{ email_username }}"
+        password: "{{ email_password }}"
+        timeout: 60
+        secure: starttls
+        subject: "CASOS ACTIVOS"
+        to: "{{ email_to }}"
+        cc: "{{ email_cc }}"
+        from: "{{ email_from }}"
+        subtype: "html"
+        body: |
+          <html>
+              <head>
+                <style>
+                  table { border-collapse: collapse; width: 100%; }
+                  th { background-color: yellow; padding: 8px; border: 1px solid black; }
+                  td { padding: 8px; border: 1px solid black; }
+                </style>
+              </head>
+              <body>
+                <h2>Casos activos para: {{ email_tecnico }}</h2>
+                <p>Cordial saludo estimado, el presente correo tiene como finalidad informarle los casos abiertos a su nombre.
+                Por favor revisar cada uno y dar su retroalimentación lo más pronto posible.</p>
+                <table>
+                  <tr>
+                    {% for key in result.query_result[0][0].keys() %}
+                      <th>{{ key | upper }}</th>
+                    {% endfor %}
+                  </tr>
+                  {% for caso in result.query_result[0] %}
+                  <tr>
+                    {% for valor in caso.values() %}
+                      <td>{{ valor }}</td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </table>
+                <br>
+                <p>Este correo es enviado automáticamente, si ya brindó seguimiento, por favor hacer caso omiso.</p>
+              </body>
+          </html>
+      delegate_to: localhost
